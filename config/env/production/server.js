@@ -3,4 +3,7 @@ module.exports = ({ env }) => ({
     dirs: {
       public: "/data/public"
     },
+    auth: {
+    secret: ${process.env.JWT_KEY}
+    }
   });
