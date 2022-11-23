@@ -26,3 +26,9 @@ services:
         generateValue: true
       - key: APP_KEYS
         generateValue: true
+      - key: REFRESH_SECRET
+        value: strapisecret
+      - key: REFRESH_TOKEN_EXPIRES
+        value: 2d
+      - key: JWT_SECRET_EXPIRES
+        value: 360s
