@@ -98,7 +98,7 @@ module.exports = (plugin) => {
                     user: await sanitizeUser(user, ctx),
                     refreshToken: issueRefreshToken({ id: user.id })
                 });
-                console.log("ecchice", ctx.response)
+                console.log("ecchice", ctx.response.body)
             }
             const advancedSettings = await store.get({ key: 'advanced' });
             const requiresConfirmation = _.get(advancedSettings, 'email_confirmation');
@@ -111,6 +111,7 @@ module.exports = (plugin) => {
             return ctx.send({
                 jwt: getService('jwt').issue({ id: user.id }),
                 user: await sanitizeUser(user, ctx),
+                refreshToken: issueRefreshToken({ id: user.id })
             });
         }
         // Connect the user with a third-party provider.
@@ -172,5 +173,16 @@ module.exports = (plugin) => {
             return ctx.badRequest(err.toString());
         }
     }
+
+    plugin.routes['content-api'].routes.push({
+        method: 'POST',
+        path: '/token/refresh',
+        handler: 'auth.refreshToken',
+        config: {
+            policies: [],
+            prefix: '',
+        }
+    });
+
     return plugin
 }
