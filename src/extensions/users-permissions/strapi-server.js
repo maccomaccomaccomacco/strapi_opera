@@ -29,6 +29,7 @@ const issueJWT = (payload, jwtOptions = {}) => {
 
 // verify the refreshToken by using the REFRESH_SECRET from the .env
 const verifyRefreshToken = (token) => {
+    console.log("e qui?")
     return new Promise(function (resolve, reject) {
         jwt.verify(token, process.env.REFRESH_SECRET, {}, function (
             err,
@@ -90,12 +91,14 @@ module.exports = (plugin) => {
                     secure: false,
                     signed: true,
                     overwrite: true,
-            });
-                ctx.send({
-                status: 'Authenticated',
-                jwt: issueJWT({ id: user.id }, { expiresIn: process.env.JWT_SECRET_EXPIRES }),
-                user: await sanitizeUser(user, ctx),
                 });
+                ctx.send({
+                    status: 'Authenticated',
+                    jwt: issueJWT({ id: user.id }, { expiresIn: process.env.JWT_SECRET_EXPIRES }),
+                    user: await sanitizeUser(user, ctx),
+                    refreshToken: issueRefreshToken({ id: user.id })
+                });
+                console.log("ecchice", ctx.response)
             }
             const advancedSettings = await store.get({ key: 'advanced' });
             const requiresConfirmation = _.get(advancedSettings, 'email_confirmation');
