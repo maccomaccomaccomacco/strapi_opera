@@ -1,0 +1,5 @@
+name: strapi_opera
+packages:
+  - path: build
+  - path: config
+  - path: src
